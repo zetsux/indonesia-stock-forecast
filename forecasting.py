@@ -55,12 +55,12 @@ class Forecasting:
             os.mkdir(path)
             
     def IssuerCode(self, state=False):
-        issuers = pd.read_csv('../data/emiten2/list_of_issuer-20230322.csv',sep=';')
+        issuers = pd.read_csv('data/list_of_issuer-20230322.csv',sep=';')
         issuer_filtered = []
         for code_stock in tqdm(issuers.Code, desc='Filtering Issuer'):
             # Check last transaction 2023
             # Have 200 transaction
-            path = f'../data/emiten2/history/{code_stock}.csv'
+            path = f'data/history/{code_stock}.csv'
             if os.path.exists(path):
                 historical = pd.read_csv(path)
                 last_date_row = historical.Date.iloc[len(historical)-1] # get last date transactions
@@ -88,7 +88,7 @@ class Forecasting:
             else:
                 print('\n############# Load dataset...')
                 code_stock = code
-                path = f'../data/emiten2/history/{code_stock}.csv'
+                path = f'data/history/{code_stock}.csv'
                 if os.path.exists(path):
                     historical = pd.read_csv(path)
                 historical.Date = pd.to_datetime(historical.Date).dt.date
