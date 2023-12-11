@@ -143,10 +143,15 @@ class Forecasting:
                         else:
                             model = architecture.build_model(input_shape=x_train.shape[1:])
                         
+                        lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+                            initial_learning_rate=1e-3,
+                            decay_steps=10000,
+                            decay_rate=1e-3)
+                        
                         model.compile(
                             loss="mse",
                             optimizer=tf.keras.optimizers.Adam(
-                                learning_rate=1e-3, decay=1e-3),
+                                learning_rate=lr_schedule),
                             metrics=[tf.keras.metrics.MeanAbsolutePercentageError(),
                                     tf.keras.metrics.MeanAbsoluteError(),
                                     tf.keras.metrics.RootMeanSquaredError()]
@@ -253,6 +258,6 @@ if __name__ == '__main__':
     parser.add_argument("--callbacks", type=int,
                         default=0, help="Callbacks (Early Stopping & Model Checkpoint) 0: False; 1: True")
     parser.add_argument(
-        "--model", type=str, default='TFCNN', help="TFCNN; TFCNNLSTM; TFCNNGRU; \nTFGRU; TFGRUCNN; TFGRULSTM; \nTFLSTM; TFLSTMCNN; TFLSTMGRU; \nTFGCNGRU; TFGCNLSTM")
+        "--model", type=str, default='TFCNN', help="TFCNN; TFCNNLSTM; TFCNNGRU; \nTFGRU; TFGRUCNN; TFGRULSTM; \nTFLSTM; TFLSTMCNN; TFLSTMGRU; \nTFGCNGRU; TFGCNLSTM; \n TFCNNLSTMGRU; TFCNNGRULSTM; TFGRULSTMCNN; TFGRUCNNLSTM; TFLSTMGRUCNN; TFLSTMCNNGRU;")
     args = parser.parse_args()
     main(args)
